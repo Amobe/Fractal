@@ -16,6 +16,10 @@
     "webpack": "^2.4.1",
     "webpack-dev-server": "^2.4.5"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Amobe/Fractal.git"
+  },
   "scripts": {
     "start": "node_modules/webpack-dev-server/bin/webpack-dev-server.js"
   },
