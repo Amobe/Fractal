@@ -27,6 +27,17 @@ module.exports = {
                     presets: ['es2015', 'stage-0'],
                 }
             },
+            {
+                loader: 'json',
+                test: /\.json$/
+            },
+        ],
+        rules: [
+            {
+                enforce: 'post',
+                loader: 'transform-loader/cacheable?brfs',
+                include: path.resolve(__dirname, 'node_modules/pixi.js')
+            }
         ]
     },
     devServer: {
