@@ -1,6 +1,6 @@
 'use strict';
 
-let [MIN_X, MAX_X, MIN_Y, MAX_Y] = [0, 1000, 0, 1000];
+let [MIN_X, MAX_X, MIN_Y, MAX_Y] = [0, 500, 0, 500];
 
 var Triangle = module.exports = function() {
   let endpointList = new Array();
