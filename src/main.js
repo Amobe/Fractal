@@ -19,7 +19,18 @@ renderer.render(stage);
 var shape = new Triangle();
 shape.init();
 shape.show();
-shape.setStartAttractor(40, 500);
 
 var drawer = new TriangleDrawer(renderer, stage);
 drawer.setTriangle(shape);
+
+renderer.plugins.interaction.on('mousedown', onMouseDown);
+
+function onMouseDown(e) {
+  if (!shape.isStartAttractorSet) {
+    let mouseData = e.data.getLocalPosition(stage);
+    shape.setStartAttractor(mouseData.x, mouseData.y);
+    console.log(shape);
+  } else {
+    shape.startGenerator(10);
+  }
+}

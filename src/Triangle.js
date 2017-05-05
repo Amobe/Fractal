@@ -1,6 +1,7 @@
 'use strict';
 
 let [MIN_X, MAX_X, MIN_Y, MAX_Y] = [0, 500, 0, 500];
+let DEFAULT_TIMEOUT = 250;
 
 var Triangle = module.exports = function() {
   let endpointList = new Array();
@@ -9,6 +10,8 @@ var Triangle = module.exports = function() {
     y: 0
   };
   let attractorList = new Array();
+  this.isStartAttractorSet = false;
+  this.isGeneratorRunning = false;
 
   this.init = function() {
     endpointList.push(getPoint());
@@ -31,21 +34,39 @@ var Triangle = module.exports = function() {
       x,
       y
     };
-    attractorList.push(startAttractor);
+    this.addAttractor(startAttractor);
+    this.isStartAttractorSet = true;
   }
 
   this.getStartAttractor = function() {
     return startAttractor;
   }
 
-  // Select a endpoint randomly
-  this.getNextAttractor = function() {
-    let lastpoint = attractorList[attractorList.length - 1];
-    let endpoint = getRandomEndpoint.apply(this);
-    let midpoint = getMidpoint(lastpoint, endpoint);
-    attractorList.push(midpoint);
-    console.log(midpoint);
-    return midpoint;
+  this.getLastAttractor = function() {
+    return attractorList[attractorList.length - 1];
+  }
+
+  this.addAttractor = function(attractor) {
+    attractorList.push(attractor);
+
+    let event = new CustomEvent('onnextattractoradd', {
+      detail: attractor
+    });
+    window.dispatchEvent(event);
+  }
+
+  this.startGenerator = async function(times) {
+    if (this.isGeneratorRunning) {
+      console.log('The attractor generator is still running.');
+      return;
+    }
+    let i = 0;
+    this.isGeneratorRunning = true;
+    while (i++ < times) {
+      await timeout(DEFAULT_TIMEOUT);
+      getNextAttractor.apply(this);
+    }
+    this.isGeneratorRunning = false;
   }
 }
 
@@ -75,4 +96,19 @@ function getMidpoint(point1, point2) {
     x: Number(((point1.x + point2.x) / 2).toFixed(2)),
     y: Number(((point1.y + point2.y) / 2).toFixed(2))
   };
+}
+
+// Calculate the midpoint between last attractor and randomly endpoint
+function getNextAttractor() {
+  let lastpoint = this.getLastAttractor();
+  let endpoint = getRandomEndpoint.apply(this);
+  let midpoint = getMidpoint(lastpoint, endpoint);
+
+  this.addAttractor(midpoint);
+
+  return midpoint;
+}
+
+function timeout(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms, 'done'));
 }
