@@ -13,15 +13,15 @@ var SliderDrawer = module.exports = function(_renderer, _stage) {
   let lineDrawer = new Graphics();
   let knobTexture = new PIXI.Texture.fromImage(DEFAULT_KNOB_PATH);
   let knobDrawer = new PIXI.Sprite(knobTexture);
-  let textDrawer = new PIXI.Text('0%', {fill: "white", align: "left"});
+  let textDrawer = new PIXI.Text('', {fill: "black", align: "left"});
   
   window.addEventListener('onknobxset', this, false);
   
   this.handleEvent = function(e) {
     switch (e.type) {
       case "onknobxset":
-        knobDrawer.position.x = e.detail;
-        textDrawer.text = slider.getValue().toString() + '%';
+        knobDrawer.position.x = e.detail.x;
+        textDrawer.text = e.detail.slider.getValueString();
         this.draw();
         break;
     }
@@ -53,6 +53,7 @@ var SliderDrawer = module.exports = function(_renderer, _stage) {
                        = knobMouseUp;
     knobDrawer.mousemove = knobDrawer.touchmove = knobMouseMove;
 
+    textDrawer.text = slider.getValueString();
     textDrawer.position.x = sliderX + length + 20;
     textDrawer.position.y = sliderY - textDrawer.height / 2;
 

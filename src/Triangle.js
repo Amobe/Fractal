@@ -10,8 +10,19 @@ var Triangle = module.exports = function() {
     y: 0
   };
   let attractorList = new Array();
+  let timeoutValue = DEFAULT_TIMEOUT;
   this.isStartAttractorSet = false;
   this.isGeneratorRunning = false;
+
+  window.addEventListener('onknobxset', this, false);
+
+  this.handleEvent = function(e) {
+    switch (e.type) {
+      case "onknobxset":
+        timeoutValue = e.detail.slider.getValue();
+        break;
+    }
+  }
 
   this.init = function() {
     endpointList.push(getPoint());
@@ -63,7 +74,7 @@ var Triangle = module.exports = function() {
     let i = 0;
     this.isGeneratorRunning = true;
     while (i++ < times) {
-      await timeout(DEFAULT_TIMEOUT);
+      await timeout(timeoutValue);
       getNextAttractor.apply(this);
     }
     this.isGeneratorRunning = false;

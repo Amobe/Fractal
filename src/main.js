@@ -32,8 +32,8 @@ stage.addChild(controllPanel);
 renderer.render(stage);
 
 // slider
-var slider = new Slider(100, 100, 100, 100);
-var sliderDrawer = new SliderDrawer(renderer, stage);
+var slider = new Slider(100, 100, 100, 1000);
+var sliderDrawer = new SliderDrawer(renderer, controllPanel);
 sliderDrawer.setSlider(slider);
 sliderDrawer.draw();
 
@@ -45,14 +45,14 @@ shape.show();
 var drawer = new TriangleDrawer(renderer, stage);
 drawer.setTriangle(shape);
 
-// renderer.plugins.interaction.on('mousedown', onMouseDown);
+renderer.plugins.interaction.on('mousedown', onMouseDown);
 
-// function onMouseDown(e) {
-//   if (!shape.isStartAttractorSet) {
-//     let mouseData = e.data.getLocalPosition(stage);
-//     shape.setStartAttractor(mouseData.x, mouseData.y);
-//     console.log(shape);
-//   } else {
-//     shape.startGenerator(10);
-//   }
-// }
+function onMouseDown(e) {
+  if (!shape.isStartAttractorSet) {
+    let mouseData = e.data.getLocalPosition(stage);
+    shape.setStartAttractor(mouseData.x, mouseData.y);
+    console.log(shape);
+  } else {
+    shape.startGenerator(100);
+  }
+}
