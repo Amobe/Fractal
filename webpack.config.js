@@ -2,42 +2,43 @@ var path = require('path')
 var webpack = require('webpack')
 
 module.exports = {
-  entry: [
-    'babel-polyfill',
-    './src/main',
-    'webpack-dev-server/client?http://localhost:8080'
-  ],
+  context: path.resolve(__dirname, 'src'),
   output: {
-    publicPath: '/',
-    filename: 'main.js'
+    path: path.resolve(__dirname, 'dist/assets'),
+    publicPath: '/assets',
+    filename: '[name].bundle.js'
+  },
+  entry: {
+    app: [
+      'babel-polyfill',
+      './main.js'
+    ]
+  },
+  devServer: {
+    contentBase: path.resolve(__dirname, 'src')
   },
   module: {
-    loaders: [{
+    rules: [
+      {
         loader: "babel-loader",
-        // Skip any files outside of your project's `src` directory
-        include: [
-          path.resolve(__dirname, "src"),
-        ],
-        // Only run `.js` file through Babel
         test: /\.js$/,
-        // Options to configure babel with
+        exclude: /node_modules/,
         query: {
-          plugins: ['transform-runtime'],
-          presets: ['es2015', 'stage-3'],
+          presets: ['es2015', 'stage-0']
         }
       },
       {
         loader: 'json',
+        include: path.join(__dirname, 'node_modules', 'pixi.js'),
         test: /\.json$/
       },
-    ],
-    rules: [{
-      enforce: 'post',
-      loader: 'transform-loader/cacheable?brfs',
-      include: path.resolve(__dirname, 'node_modules/pixi.js')
-    }]
-  },
-  devServer: {
-    contentBase: './src'
+      {
+        loader: 'url-loader',
+        test: /\.(png|jpg)$/,
+        query: {
+          limit: 10000
+        }
+      }
+    ]
   }
 }

@@ -18,6 +18,8 @@
     "babel-preset-es2015": "^6.24.1",
     "babel-preset-stage-0": "^6.24.1",
     "babel-preset-stage-3": "^6.24.1",
+    "file-loader": "^0.11.1",
+    "url-loader": "^0.5.8",
     "webpack": "^2.4.1",
     "webpack-dev-server": "^2.4.5"
   },
@@ -26,6 +28,7 @@
     "url": "https://github.com/Amobe/Fractal.git"
   },
   "scripts": {
+    "build": "node_modules/webpack/bin/webpack.js -p",
     "start": "node_modules/webpack-dev-server/bin/webpack-dev-server.js"
   },
   "keywords": [
