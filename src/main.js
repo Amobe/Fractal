@@ -37,21 +37,31 @@ var sliderDrawer = new SliderDrawer(renderer, controllPanel);
 sliderDrawer.setSlider(slider);
 sliderDrawer.draw();
 
+// display panel
+var displayPanel = new PIXI.Graphics();
+displayPanel.x = 0;
+displayPanel.y = 0;
+displayPanel.beginFill(0x061639);
+displayPanel.drawRect(0, 0, 500, 500);
+displayPanel.endFill();
+displayPanel.interactive = true;
+stage.addChild(displayPanel);
+renderer.render(stage);
+
 // create triangle
 var shape = new Triangle();
 shape.init();
 shape.show();
 
-var drawer = new TriangleDrawer(renderer, stage);
+var drawer = new TriangleDrawer(renderer, displayPanel);
 drawer.setTriangle(shape);
 
-renderer.plugins.interaction.on('mousedown', onMouseDown);
+displayPanel.on('mousedown', onMouseDown);
 
 function onMouseDown(e) {
   if (!shape.isStartAttractorSet) {
     let mouseData = e.data.getLocalPosition(stage);
     shape.setStartAttractor(mouseData.x, mouseData.y);
-    console.log(shape);
   } else {
     shape.startGenerator(100);
   }
